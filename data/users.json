@@ -1,8 +1,14 @@
 [
   {
     "id": "1",
-    "email": "admin@company.com",
+    "email": "admin@co.com",
     "password": "$2b$10$IpbxyarDHHQ.MDHcOBVZCegpRi/VgP5aR.WE06ZErTx8JEvGE54Mm",
     "role": "admin"
+  },
+  {
+    "id": "9c5ff2a8-afa3-4606-94a9-979ecead16b0",
+    "email": "scott@heathmedia.co",
+    "password": "$2b$10$Qs.IBdRoLKBz7xLGxMtqFOo6s593.rnQFAjMJGoWlDNNSGKF0Xyti",
+    "role": "user"
   }
 ]

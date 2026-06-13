@@ -1,0 +1,35 @@
+[
+  {
+    "id": "07d15705-3d08-45bd-988d-c612329dbe24",
+    "fname": "asdf",
+    "lname": "asdf",
+    "department": "asdf",
+    "role": "asdf",
+    "email": "asdf@asdf.com",
+    "phone": "asdf",
+    "joinDate": "2026-06-13",
+    "location": "asdf"
+  },
+  {
+    "id": "b5eb2c0f-ba74-4a92-8a60-ef4dd36d010b",
+    "fname": "a",
+    "lname": "a",
+    "department": "Eng",
+    "role": "a",
+    "email": "a@a.xom",
+    "phone": "num",
+    "joinDate": "2026-06-13",
+    "location": "NYC"
+  },
+  {
+    "id": "88b80453-3198-4625-9b67-7830eb3b4cea",
+    "fname": "Scott",
+    "lname": "Heath",
+    "department": "Engineering",
+    "role": "Full Stack Engineer",
+    "email": "scott@heathmedia.co",
+    "phone": "+1 (919) 123-4567",
+    "joinDate": "2026-06-13",
+    "location": "Raleigh, NC"
+  }
+]

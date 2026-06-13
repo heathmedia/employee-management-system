@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>EMS — Sign In</title>
+  <title>Log In</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
   <style>
@@ -11,23 +11,23 @@
 </head>
 <body>
   <div class="wrap">
-    <div class="side">
-      <div class="brand">EMS<span>.</span></div>
-      <p class="tagline">Employee management, simplified for your whole team.</p>
-    </div>
-    <div class="main">
-      <p class="eyebrow">Welcome back</p>
-      <h1>Sign in to your account</h1>
+      <h1>Log in to your account</h1>
 
-      <% if (error) { %>
+      <% if (locals.error) { %>
         <div class="error-box" style="display:flex">
           ⚠ <%= error %>
         </div>
       <% } %>
 
+      <% if (locals.message) { %>
+        <div class="message-box" style="display:flex">
+          ⚠ <%= message %>
+        </div>
+      <% } %>
+
       <form method="POST" action="/login">
         <div class="field">
-          <label for="email">Email address</label>
+          <label for="email">Email</label>
           <input type="email" id="email" name="email" required autocomplete="email">
         </div>
         <div class="field">
@@ -36,7 +36,7 @@
         </div>
         <button class="submit-btn" type="submit">Sign in</button>
       </form>
-    </div>
+      <a href="/signup">Sign Up</a>
   </div>
 </body>
 </html>

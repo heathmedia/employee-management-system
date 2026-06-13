@@ -7,7 +7,7 @@ const { requireLogin, requireAdmin } = require('./middleware/auth');
 const app = express();
 const PORT = 3000;
 
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
@@ -18,31 +18,69 @@ app.use(session({
     resave: false,                  // don't save session if nothing changed
     saveUninitialized: false,       // don't create session until something is stored
     cookie: {
-    httpOnly: true,                 // JS in browser cannot access this cookie
+        httpOnly: true,                 // JS in browser cannot access this cookie
         maxAge: 1000 * 60 * 60 * 2  // 2 hours in milliseconds
     }
 }));
 
-// Read users from file
-function getUsers() {
-    const data = fs.readFileSync('./data/users.json', 'utf-8');
-    return JSON.parse(data);
-}
-
 // Auth routes
 app.get('/login', (req, res) => {
     if (req.session.user) { // already logged in
-        return res.redirect('/dashboard'); 
+        return res.redirect('/dashboard');
     }
     res.render('login', { error: null });
 });
 
+app.get('/signup', (req, res) => {
+    if (req.session.user && req.session.user.role === 'admin') { // already logged in
+        if (req.session.user.role === 'admin') {
+            return res.redirect('/dashboard');
+        } else {
+            return res.redirect('/directory');
+        }
+    }
+    res.render('signup', { error: ''});
+});
+
+app.post('/signup', async (req, res) => {
+    const { email, password } = req.body;
+    const users = readUsers()
+
+    // check if email is already taken
+    if (users.find(user => user.email.toLowerCase() === email.toLowerCase())) {
+        return res.render('signup', { error: "Email address already taken. Sign in or try a different email." });
+    }
+
+    const employees = readEmployees();
+
+    // check if email is a valid employee email
+    if (!employees.find(employee => employee.email.toLowerCase() === email.toLowerCase())) {
+        return res.render('signup', { error: "Invalid email. Please try again or contact your administrator."})
+    }
+
+    // save new user
+    const user = {
+        id: crypto.randomUUID(),
+        email: email.toLowerCase(),
+        password: await bcrypt.hash(password, 10),
+        role: 'user'
+    };
+
+    users.push(user);
+    writeUsers(users);
+    console.log("NEW USER CREATED", user.email);
+    res.render('login', {
+        message: 'New account created. Please sign in.',
+    });
+    
+});
+
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    const users = getUsers();
+    const users = readUsers();
     const user = users.find(u => u.email === email);
 
-    if(!user) {
+    if (!user) {
         return res.render('login', {
             error: 'Invalid email or password'
         });
@@ -60,7 +98,7 @@ app.post('/login', async (req, res) => {
 
     // Redirect based on rolef
     if (user.role === 'admin') {
-        return res.redirect('/dashboard');l
+        return res.redirect('/dashboard'); l
     }
     res.redirect('/my-profile');
 });
@@ -73,20 +111,93 @@ app.post('/logout', (req, res) => {
 
 // Protected routes
 app.get('/dashboard', requireAdmin, (req, res) => {
-    res.render('dashboard', { user: req.session.user });
+    const employees = readEmployees();
+    res.render('dashboard', {
+        user: req.session.user,
+        role: req.session.user.role,
+        employees: employees
+    });
+});
+
+app.get('/directory', requireLogin, (req, res) => {
+    const employees = readEmployees();
+    res.render('dashboard', {
+        user: req.session.user,
+        role: req.session.user.role,
+        employees: employees
+    });
 });
 
 app.get('my-profile', requireLogin, (req, res) => {
     res.render('profile', { user: req.session.user });
 });
 
-// app.get('/', (req, res) => {
-//     let msg = "Homepage";
-//     res.render('index', { message:  msg });
-// });
-
-app.get('/dashboard', requireLogin, (req, res) => {
-
+app.get('/', (req, res) => {
+    res.redirect('/login')
 });
+
+app.get('/addEmployee', requireAdmin, (req, res) => {
+    res.render('addEmployee')
+});
+
+app.post('/addEmployee', requireAdmin, (req, res) => {
+    console.log("POST to /addEmployee...")
+    const { fname, lname, role, email, phone, department, joinDate, location } = req.body;
+    const employees = readEmployees();
+    console.log("EMPLOYEES", employees);
+    const newEmployee = {
+        id: crypto.randomUUID(),
+        fname,
+        lname,
+        department,
+        role,
+        email,
+        phone,
+        joinDate,
+        location
+    };
+
+    console.log("NEW EMPLOYEE", newEmployee);
+
+    employees.push(newEmployee);
+    writeEmployees(employees);
+
+    res.redirect('/dashboard');
+});
+
+// Read / write functions for users and employees
+function readUsers() {
+    const data = fs.readFileSync('./data/users.json', 'utf-8');
+    return JSON.parse(data);
+}
+
+function writeUsers(data) {
+    try {
+        fs.writeFileSync('./data/users.json', JSON.stringify(data, null, 2));
+        return true;
+    } catch {
+        console.log('ERROR: unable to write user to file.');
+        return false;
+    }
+}
+
+function readEmployees() {
+    try {
+        const data = fs.readFileSync('./data/employees.json', 'utf-8');
+        return JSON.parse(data);
+    } catch {
+        return [];
+    }
+}
+
+function writeEmployees(data) {
+    try {
+        fs.writeFileSync('./data/employees.json', JSON.stringify(data, null, 2));
+        return true;
+    } catch {
+        console.log('ERROR: unable to write employee to file.');
+        return false;
+    }
+}
 
 app.listen(PORT, () => console.log('Server running on port', PORT))

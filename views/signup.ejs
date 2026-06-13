@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        /* paste the CSS from the widget above */
+    </style>
+</head>
+
+<body>
+    <div class="wrap"></div>
+        <h1>Sign Up</h1>
+        <p>Create your account. Provide an email and password to get started</p>
+
+        <% if (locals.error) { %>
+            <div class="error-box" style="display:flex">
+                ⚠ <%= error %>
+            </div>
+        <% } %>
+
+        <form method="POST" action="/signup">
+            <div class="field">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required autocomplete="email">
+            </div>
+            <div class="field">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required autocomplete="current-password">
+            </div>
+            <button class="submit-btn" type="submit">Sign Up</button>
+        </form>
+        <a href="/login">Login</a>
+    </div>
+</body>
+
+</html>

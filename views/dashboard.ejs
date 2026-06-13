@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Directory</title>
+    <title>Dashboard</title>
 </head>
 <body>
-    <h1>Employee Directory</h1>
+    <h1><%= role %> Dashboard</h1> 
+    Welcome to your dashboard
+    <a href="/addEmployee">Add Employee</a>
     <% if (employees.length === 0) { %>
         No employees found
     <% } else { %>
