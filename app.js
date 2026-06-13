@@ -100,7 +100,13 @@ app.post('/login', async (req, res) => {
     if (user.role === 'admin') {
         return res.redirect('/dashboard'); l
     }
-    res.redirect('/my-profile');
+    res.redirect('/directory');
+});
+
+app.get('/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/login');
+    });
 });
 
 app.post('/logout', (req, res) => {
@@ -121,14 +127,14 @@ app.get('/dashboard', requireAdmin, (req, res) => {
 
 app.get('/directory', requireLogin, (req, res) => {
     const employees = readEmployees();
-    res.render('dashboard', {
+    res.render('directory', {
         user: req.session.user,
         role: req.session.user.role,
         employees: employees
     });
 });
 
-app.get('my-profile', requireLogin, (req, res) => {
+app.get('profile', requireLogin, (req, res) => {
     res.render('profile', { user: req.session.user });
 });
 
