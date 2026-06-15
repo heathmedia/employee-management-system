@@ -24,11 +24,11 @@
         <td><%= employee.joinDate %></td>
         <td><%= employee.location %></td>
         <% if (locals.user.role === 'admin') { %>
-            <td>
-                <button onclick="location.href = '/editEmployee/<%= employee.id %>'">
+            <td class="flex grid grid-cols-2 gap-2">
+                <button class="btn-regular" onclick="location.href = '/editEmployee/<%= employee.id %>'">
                     Edit
                 </button>
-                <button onclick="confirmEmployeeDelete(
+                <button class="btn-regular" onclick="confirmEmployeeDelete(
                 '<%= employee.id %>','<%= employee.fname %>','<%= employee.lname %>')">
                     Delete
                 </button>

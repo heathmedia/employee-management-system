@@ -1,41 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include('./partials/head', { pageTitle: 'Sign In' }) %>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Sign Up</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&display=swap"
-        rel="stylesheet">
-    <style>
-        /* paste the CSS from the widget above */
-    </style>
-</head>
+<div class="flex min-h-screen font-sans">
 
-<body>
-    <div class="wrap"></div>
-        <h1>Sign Up</h1>
-        <p>Create your account. Provide an email and password to get started</p>
-
-        <% if (locals.error) { %>
-            <div class="error-box" style="display:flex">
-                ⚠ <%= error %>
-            </div>
-        <% } %>
-
-        <form method="POST" action="/signup">
-            <div class="field">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required autocomplete="email">
-            </div>
-            <div class="field">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required autocomplete="current-password">
-            </div>
-            <button class="submit-btn" type="submit">Sign Up</button>
-        </form>
-        <a href="/login">Login</a>
+  <!-- Left panel -->
+  <div class="hidden md:flex w-5/12 bg-slate-900 flex-col justify-between p-10">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center text-white text-sm font-medium">E</div>
+      <span class="text-white text-sm font-medium tracking-wide">EMS Portal</span>
     </div>
-</body>
 
-</html>
+    <div>
+      <h1 class="font-serif text-4xl text-white leading-snug mb-3">
+        Manage your team <span class="text-indigo-400 italic">effortlessly</span>
+      </h1>
+      <p class="text-slate-500 text-sm leading-relaxed">
+        One place for employee records,<br>roles, and access control.
+      </p>
+    </div>
+
+    <div class="text-slate-600 text-xs">Scott Heath &copy; 2025</div>
+  </div>
+
+  <!-- Right panel -->
+  <div class="flex-1 flex items-center justify-center bg-slate-50 p-8">
+    <div class="bg-white border border-slate-200 rounded-2xl p-9 w-full max-w-sm">
+
+      <p class="header-secondary">Create an account</p>
+      <h2 class="header-primary">Join with your work email</h2>
+
+      <% if (locals.error) { %>
+        <div class="msg-error">
+          <%= locals.error %>
+        </div>
+      <% } %>
+
+      <form method="POST" action="/signup">
+        <div class="mb-4">
+          <label class="label-primary">Email address</label>
+          <input
+            type="email"
+            name="email"
+            placeholder="you@acme.com"
+            required
+            autocomplete="email"
+            class=""
+          >
+        </div>
+
+        <div class="mb-5">
+          <label class="label-primary">Password</label>
+          <input
+            type="password"
+            name="password"
+            placeholder="••••••••"
+            required
+            autocomplete="current-password"
+            class=""
+          >
+        </div>
+
+        <button
+          type="submit"
+          class="btn-submit w-full">
+          Sign up
+        </button>
+      </form>
+
+      <div class="flex items-center gap-3 my-5">
+        <div class="flex-1 h-px bg-slate-200"></div>
+        <span class="text-xs text-slate-400">Already have an account?</span>
+        <div class="flex-1 h-px bg-slate-200"></div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-2">
+        <a href="/login"
+          class="btn-secondary"
+        >
+          Log in
+        </a> 
+      </div>
+
+      <p class="text-center text-xs text-slate-400 mt-5">
+        Need help? <a href="#" class="text-indigo-500 hover:underline">Contact IT support</a>
+      </p>
+
+    </div>
+  </div>
+</div>
+
+<%- include('./partials/foot') %>

@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-</head>
+<%- include('./partials/head', { pageTitle: 'Sign In' }) %>
+
+<%- include('./partials/header') %>
+<div class="content">
+<% if(locals.error) { %>
+    <div class="error-box"><%= error %></div>
+<% } %>
+<% if(locals.message) { %>
+    <div class="message"><%= message %></div>
+<% } %>
+<div class="flex w-100 items-center justify-between">
+<h1>Dashboard</h1> 
+<a href="/addEmployee" class="btn-submit p-2">+ Add Employee</a>
+</div>
+<% if (employees.length === 0) { %>
+    No employees found
+<% } else { %>
+    <%- include('./partials/employeeList', { employees: employees }) %>
+<% } %>
+</div>
 <script>
     function confirmEmployeeDelete(id, fname, lname) {
         console.log('DELETE ID', id);
@@ -17,20 +30,4 @@
         }
     }
 </script>
-<body>
-    <%- include('./partials/navBarLoggedIn.ejs') %>
-    <h1><%= role %> Dashboard</h1> 
-    <% if(locals.error) { %>
-        <div class="error-box"><%= error %></div>
-    <% } %>
-    <% if(locals.message) { %>
-        <div class="message"><%= message %></div>
-    <% } %>
-    <a href="/addEmployee">Add Employee</a>
-    <% if (employees.length === 0) { %>
-        No employees found
-    <% } else { %>
-        <%- include('./partials/employeeList', { employees: employees }) %>
-    <% } %>
-</body>
-</html>
+<%- include('./partials/foot') %>
