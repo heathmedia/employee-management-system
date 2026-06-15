@@ -52,16 +52,19 @@ app.post('/signup', async (req, res) => {
     }
 
     const employees = readEmployees();
+    const employee = employees.find(employee => employee.email.toLowerCase() === email.toLowerCase());
+
+    
 
     // check if email is a valid employee email
-    if (!employees.find(employee => employee.email.toLowerCase() === email.toLowerCase())) {
+    if (!employee) {
         return res.render('signup', { error: "Invalid email. Please try again or contact your administrator."})
     }
 
     // save new user
     const user = {
-        id: crypto.randomUUID(),
-        email: email.toLowerCase(),
+        id: employee.id,
+        email: employee.email,
         password: await bcrypt.hash(password, 10),
         role: 'user'
     };
@@ -169,6 +172,58 @@ app.post('/addEmployee', requireAdmin, (req, res) => {
     writeEmployees(employees);
 
     res.redirect('/dashboard');
+});
+
+app.get('/editEmployee/:id', requireAdmin, (req, res) => {
+    console.log("EDIT EMPLOYEE, ID:", req.params.id);
+
+    const employees = readEmployees();
+    const employee = employees.find(employee => employee.id === req.params.id);
+
+    if(!employee) return false;
+
+    res.render('editEmployee', { employee: employee });
+});
+
+app.post('/editEmployee/:id', requireAdmin, (req, res) => {
+    console.log("EDIT EMPLOYEE (PUT)");
+    const { fname, lname, role, email, phone, department, joinDate, location } = req.body;
+    const employees = readEmployees();
+    const filteredEmployees = employees.filter(employee => employee.id !== req.params.id);
+    const editedEmployee = {
+        id: req.params.id,
+        fname,
+        lname,
+        department,
+        role,
+        email,
+        phone,
+        joinDate,
+        location
+    };
+    filteredEmployees.push(editedEmployee);
+    writeEmployees(filteredEmployees);
+    
+    res.render('dashboard', { 
+        employees: filteredEmployees,
+        message: 'Employee updated successfully' 
+    });
+});
+
+app.post('/deleteEmployee/:id', requireAdmin, (req, res) => {
+    console.log("DELETE EMPLOYEE, ID:", req.params.id);
+
+    // Delete employee
+    const employees = readEmployees();
+    const filteredEmployees = employees.filter(employee => employee.id !== req.params.id);
+    writeEmployees(filteredEmployees);
+
+    // Delete associated user account
+    const users = readUsers();
+    const filteredUsers = users.filter(user => user.id !== req.params.id);
+    writeUsers(filteredUsers);
+
+    res.sendStatus(200);
 });
 
 // Read / write functions for users and employees

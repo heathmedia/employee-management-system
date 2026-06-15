@@ -9,6 +9,9 @@
             <th>Phone</th>
             <th>Join Date</th>
             <th>Location</th>
+            <% if (locals.user.role === 'admin') { %>
+                <th></th>
+            <% } %>
         </tr>
 <% employees.forEach( employee => { %>
     <tr>
@@ -20,6 +23,17 @@
         <td><%= employee.phone %></td>
         <td><%= employee.joinDate %></td>
         <td><%= employee.location %></td>
+        <% if (locals.user.role === 'admin') { %>
+            <td>
+                <button onclick="location.href = '/editEmployee/<%= employee.id %>'">
+                    Edit
+                </button>
+                <button onclick="confirmEmployeeDelete(
+                '<%= employee.id %>','<%= employee.fname %>','<%= employee.lname %>')">
+                    Delete
+                </button>
+            </td>
+        <% } %>
     </tr>
 <% }) %>
 </tbody>

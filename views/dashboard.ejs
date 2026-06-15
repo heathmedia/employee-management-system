@@ -5,15 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
 </head>
+<script>
+    function confirmEmployeeDelete(id, fname, lname) {
+        console.log('DELETE ID', id);
+        const confirmed = confirm(`Are you sure you want to delete ${fname} ${lname}?`);
+        if (confirmed) {
+            fetch(`./deleteEmployee/${id}`, { method: 'POST' })
+                .then(res => {
+                if (res.ok) window.location.reload();
+            });
+        }
+    }
+</script>
 <body>
     <%- include('./partials/navBarLoggedIn.ejs') %>
     <h1><%= role %> Dashboard</h1> 
-    Welcome to your dashboard
+    <% if(locals.error) { %>
+        <div class="error-box"><%= error %></div>
+    <% } %>
+    <% if(locals.message) { %>
+        <div class="message"><%= message %></div>
+    <% } %>
     <a href="/addEmployee">Add Employee</a>
     <% if (employees.length === 0) { %>
         No employees found
     <% } else { %>
-        <%- include('./partials/employeeList', { employees: employees}) %>
+        <%- include('./partials/employeeList', { employees: employees }) %>
     <% } %>
 </body>
 </html>
