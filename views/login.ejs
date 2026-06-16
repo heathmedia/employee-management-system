@@ -28,11 +28,7 @@
       <p class="header-secondary">Welcome back</p>
       <h2 class="header-primary">Sign in to your account</h2>
 
-      <% if (locals.error) { %>
-        <div class="msg-error">
-          <%= locals.error %>
-        </div>
-      <% } %>
+      <%- include('./partials/statusMessage') %>
 
       <form method="POST" action="/login">
         <div class="mb-4">

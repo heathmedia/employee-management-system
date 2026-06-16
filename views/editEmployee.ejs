@@ -1,43 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Employee</title>
-</head>
-<body>
-<h1>Edit Employee</h1> 
+<%- include('./partials/head', { pageTitle: 'Edit Employee' }) %>
+
+<%- include('./partials/header') %>
+
+<div class="content">
+<h1>Edit Employee</h1>
+    <% if(!employee) { %>
+        Employee not found.
+        <div class="my-4"><a href="/dashboard">< Back to Dashboard</a></div>
+    <% } else { %>
     <form method="POST" action="/editEmployee/<%= employee.id %>">
-        <label for="fname">First Name</label>
-        <input name="fname" type="text" required value="<%= employee.fname %>" />
-        </br>
-        <label for="lname">Last Name</label>
-        <input name="lname" type="text" required value="<%= employee.lname %>" />
-        </br>
-        <label for="role">Role</label>
-        <input name="role" type="text" required 
-            placeholder="Back-end Engineer" value="<%= employee.role %>" />
-        </br>
-        <label for="email">Email</label>
-        <input name="email" type="email" required 
-            placeholder="name@company.com" value="<%= employee.email %>" />
-        </br>
-        <label for="phone">Phone</label>
-        <input name="phone" type="text" required 
-            placeholder="+1 (123) 456-7890" value="<%= employee.phone %>" />
-        </br>
-        <label for="department">Department</label>
-        <input name="department" type="text" required 
-            placeholder="Engineering" value="<%= employee.department %>" />
-        </br>
-        <label for="joinDate">Join Date</label>
-        <input name="joinDate" type="date" required
-            placeholder="MM/DD/YYYY" value="<%= employee.joinDate %>"  />
-        <label for="location">Location</label>
-        <input name="location" type="text" required 
-            placeholder="New York, NY" value="<%= employee.location %>" />
-        </br>
-        <input type="submit" value="Save" />
+        <div class="formGrid2ColContainer"> 
+
+            <div class="formGridRow2Col">
+                <label for="fname">First Name</label>
+                <input name="fname" type="text" required value="<%= employee.fname %>" />
+            </div>
+            <div class="formGridRow2Col">
+                <label for="lname">Last Name</label>
+                <input name="lname" type="text" required value="<%= employee.lname %>" />
+            </div>
+
+            <div class="formGridRow2Col">
+                <label for="department">Department</label>
+                <select name="department">
+                    <% Object.entries(DEPARTMENTS).forEach(([key, label]) => { %>
+                        <option value="<%= key %>" <%= employee.department === key ? 'selected' : '' %>>
+                            <%= label %>
+                        </option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="formGridRow2Col">
+                <label for="role">Role</label>
+                <input name="role" type="text" required value="<%= employee.role %>" />
+            </div>
+            
+            <div class="formGridRow2Col">
+                <label for="email">Email</label>
+                <input name="email" type="email" required 
+                    placeholder="name@company.com" value="<%= employee.email %>" />
+            </div>
+            <div class="formGridRow2Col">
+                <label for="phone">Phone</label>
+                <input name="phone" type="text" required 
+                    placeholder="+1 (123) 456-7890" value="<%= employee.phone %>" />
+            </div>
+        
+            <div class="formGridRow2Col">
+                <label for="joinDate">Join Date</label>
+                <input name="joinDate" type="date" required
+                    placeholder="MM/DD/YYYY" value="<%= employee.joinDate %>"  />
+            </div>
+
+            <div class="formGridRow2Col">
+                <label for="location">Location</label>
+                <input name="location" type="text" required 
+                    placeholder="New York, NY" value="<%= employee.location %>" />
+            </div>
+
+            <div class="mt-6 flex gap-3">
+                <input type="submit" class="btn-submit" value="Save" />
+                <input type="button" class="btn-secondary" value="Cancel" onclick="window.location.href='/dashboard'"/>
+            </div>
+        </div>
     </form>
-</body>
-</html>
+    <% } %>
+</div>

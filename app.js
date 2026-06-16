@@ -6,6 +6,15 @@ const { requireLogin, requireAdmin } = require('./middleware/auth');
 
 const app = express();
 const PORT = 3000;
+const DEPARTMENTS = {
+    creative: 'Creative',
+    finance: 'Finance',
+    engineering: 'Engineering',
+    hr: 'Human Resources',
+    it: 'Information Technology',
+    marketing: 'Marketing',
+    operations: 'Operations',
+};
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -23,59 +32,25 @@ app.use(session({
     }
 }));
 
+// Auto-inject session data into all views
+app.use((req, res, next) => {
+    res.locals.user = req.session.user || null;
+    res.locals.role = req.session.user?.role || null;
+    res.locals.DEPARTMENTS = DEPARTMENTS;
+
+    // Read flash then immediately clear it so it only shows once
+    res.locals.flash = req.session.flash || null;
+    delete req.session.flash;
+
+    next();
+});
+
 // Auth routes
 app.get('/login', (req, res) => {
     if (req.session.user) { // already logged in
         return res.redirect('/dashboard');
     }
-    res.render('login', { error: null });
-});
-
-app.get('/signup', (req, res) => {
-    if (req.session.user && req.session.user.role === 'admin') { // already logged in
-        if (req.session.user.role === 'admin') {
-            return res.redirect('/dashboard');
-        } else {
-            return res.redirect('/directory');
-        }
-    }
-    res.render('signup', { error: ''});
-});
-
-app.post('/signup', async (req, res) => {
-    const { email, password } = req.body;
-    const users = readUsers()
-
-    // check if email is already taken
-    if (users.find(user => user.email.toLowerCase() === email.toLowerCase())) {
-        return res.render('signup', { error: "Email address already taken. Sign in or try a different email." });
-    }
-
-    const employees = readEmployees();
-    const employee = employees.find(employee => employee.email.toLowerCase() === email.toLowerCase());
-
-    
-
-    // check if email is a valid employee email
-    if (!employee) {
-        return res.render('signup', { error: "Invalid email. Please try again or contact your administrator."})
-    }
-
-    // save new user
-    const user = {
-        id: employee.id,
-        email: employee.email,
-        password: await bcrypt.hash(password, 10),
-        role: 'user'
-    };
-
-    users.push(user);
-    writeUsers(users);
-    console.log("NEW USER CREATED", user.email);
-    res.render('login', {
-        message: 'New account created. Please sign in.',
-    });
-    
+    res.render('login');
 });
 
 app.post('/login', async (req, res) => {
@@ -84,22 +59,20 @@ app.post('/login', async (req, res) => {
     const user = users.find(u => u.email === email);
 
     if (!user) {
-        return res.render('login', {
-            error: 'Invalid email or password'
-        });
+        res.locals.flash = { type: "error", message: "Invalid email or password" };
+        return res.render('login');
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-        return res.render('login', {
-            error: 'Invalid email or password'
-        });
+        res.locals.flash = { type: "error", message: "Invalid email or password" }
+        return res.render('login');
     }
 
     // Save only safe fields to session - never the password hash
     req.session.user = { id: user.id, email: user.email, role: user.role };
 
-    // Redirect based on rolef
+    // Redirect based on role
     if (user.role === 'admin') {
         return res.redirect('/dashboard'); l
     }
@@ -118,27 +91,73 @@ app.post('/logout', (req, res) => {
     });
 });
 
+app.get('/signup', (req, res) => {
+    if (req.session.user && req.session.user.role === 'admin') { // already logged in
+        if (req.session.user.role === 'admin') {
+            return res.redirect('/dashboard');
+        } else {
+            return res.redirect('/directory');
+        }
+    }
+    res.render('signup');
+});
+
+app.post('/signup', async (req, res) => {
+    const { email, password } = req.body;
+    const users = readUsers()
+
+    // check if email is already taken
+    if (users.find(user => user.email.toLowerCase() === email.toLowerCase())) {
+        res.locals.flash = { type: "error", message: "Email address already taken. Sign in or try a different email." };
+        return res.render('signup');
+    }
+
+    const employees = readEmployees();
+    const employee = employees.find(employee => employee.email.toLowerCase() === email.toLowerCase());
+
+    
+
+    // check if email is a valid employee email
+    if (!employee) {
+        res.locals.flash = { type: "error", message: "Invalid email. Please try again or contact your administrator." };
+        return res.render('signup')
+    }
+
+    // save new user
+    const user = {
+        id: employee.id,
+        email: employee.email,
+        password: await bcrypt.hash(password, 10),
+        role: 'user'
+    };
+
+    users.push(user);
+    writeUsers(users);
+    console.log("NEW USER CREATED", user.email);
+    req.session.flash = { type: "success", message: "New account created. Please sign in." }
+    res.redirect('login');
+    
+});
+
 // Protected routes
 app.get('/dashboard', requireAdmin, (req, res) => {
     const employees = readEmployees();
+    employees.sort((a,b) => new Date(b.joinDate) - new Date(a.joinDate))
     res.render('dashboard', {
-        user: req.session.user,
-        role: req.session.user.role,
-        employees: employees
+        employees: employees,
+        recentHires: employees.slice(0,5)
     });
 });
 
 app.get('/directory', requireLogin, (req, res) => {
     const employees = readEmployees();
     res.render('directory', {
-        user: req.session.user,
-        role: req.session.user.role,
         employees: employees
     });
 });
 
 app.get('profile', requireLogin, (req, res) => {
-    res.render('profile', { user: req.session.user });
+    res.render('profile');
 });
 
 app.get('/', (req, res) => {
@@ -171,7 +190,8 @@ app.post('/addEmployee', requireAdmin, (req, res) => {
     employees.push(newEmployee);
     writeEmployees(employees);
 
-    res.redirect('/dashboard');
+    req.session.flash = { type: 'success', message: 'Employee added successfully' }
+    res.redirect('dashboard');
 });
 
 app.get('/editEmployee/:id', requireAdmin, (req, res) => {
@@ -180,7 +200,10 @@ app.get('/editEmployee/:id', requireAdmin, (req, res) => {
     const employees = readEmployees();
     const employee = employees.find(employee => employee.id === req.params.id);
 
-    if(!employee) return false;
+    if(!employee) {
+        res.locals.flash = { type: 'error', message: "Employee not found." }
+        return res.render('editEmployee', { employee: null });
+    }
 
     res.render('editEmployee', { employee: employee });
 });
@@ -204,10 +227,8 @@ app.post('/editEmployee/:id', requireAdmin, (req, res) => {
     filteredEmployees.push(editedEmployee);
     writeEmployees(filteredEmployees);
     
-    res.render('dashboard', { 
-        employees: filteredEmployees,
-        message: 'Employee updated successfully' 
-    });
+    req.session.flash = { type: "success", message: "Employee updated successfully" }; 
+    res.redirect('/dashboard');
 });
 
 app.post('/deleteEmployee/:id', requireAdmin, (req, res) => {

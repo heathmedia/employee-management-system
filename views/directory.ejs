@@ -1,17 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Directory</title>
-</head>
-<body>
-    <%- include('./partials/navBarLoggedIn.ejs') %>
-    <h1>Employee Directory</h1>
+<%- include('./partials/head', { pageTitle: 'Dashboard' }) %>
+
+<%- include('./partials/header') %>
+<div class="content">
+    <%- include('./partials/statusMessage') %>
+    <div class="flex w-100 items-center justify-between">
+        <h1>Directory</h1> 
+    </div>
     <% if (employees.length === 0) { %>
         No employees found
     <% } else { %>
-        <%- include('./partials/employeeList', { employees: employees}) %>
+        <%- include('./partials/employeeList', { employees: employees }) %>
     <% } %>
-</body>
-</html>
+</div>

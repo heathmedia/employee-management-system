@@ -9,7 +9,8 @@ function requireLogin(req, res, next) {
 // Redirect to login if user is not an admin
 function requireAdmin(req, res, next) {
     if (!req.session.user || req.session.user.role !== 'admin') {
-        return res.status(403).render('error', { message: 'Access denied' })
+        req.session.flash = res.locals.flash = { type: "error", message: "Access denied" };
+        return res.status(403).render('error');
     }
     next();
 }

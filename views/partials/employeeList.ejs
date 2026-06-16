@@ -1,4 +1,4 @@
-<table border="1">
+<table class="employeeList">
     <tbody>
         <tr>
             <th>First Name</th>
@@ -17,21 +17,23 @@
     <tr>
         <td><%= employee.fname %></td>
         <td><%= employee.lname %></td>
-        <td><%= employee.department %></td>
+        <td><%= DEPARTMENTS[employee.department] %></td>
         <td><%= employee.role %></td>
         <td><%= employee.email %></td>
         <td><%= employee.phone %></td>
         <td><%= employee.joinDate %></td>
         <td><%= employee.location %></td>
         <% if (locals.user.role === 'admin') { %>
-            <td class="flex grid grid-cols-2 gap-2">
-                <button class="btn-regular" onclick="location.href = '/editEmployee/<%= employee.id %>'">
-                    Edit
+            <td class="whitespace-nowrap">
+                <div class="flex gap-2">
+                <button title="Edit" aria-label="Edit employee" class="btn-regular min-w-8" onclick="location.href = '/editEmployee/<%= employee.id %>'">
+                    <i class="fa-solid fa-pencil"></i>
                 </button>
-                <button class="btn-regular" onclick="confirmEmployeeDelete(
+                <button title="Delete" aria-label="Delete employee" class="btn-regular min-w-8" onclick="confirmEmployeeDelete(
                 '<%= employee.id %>','<%= employee.fname %>','<%= employee.lname %>')">
-                    Delete
+                    <i class="fa-solid fa-trash"></i>
                 </button>
+                </div>
             </td>
         <% } %>
     </tr>

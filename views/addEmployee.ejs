@@ -1,43 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Employee</title>
-</head>
-<body>
-<h1>Add Employee</h1> 
+<%- include('./partials/head', { pageTitle: 'Add Employee' }) %>
+
+<%- include('./partials/header') %>
+
+<div class="content">
+<h1>Edit Employee</h1> 
     <form method="POST" action="/addEmployee">
-        <label for="fname">First Name</label>
-        <input name="fname" type="text" required />
-        </br>
-        <label for="lname">Last Name</label>
-        <input name="lname" type="text" required />
-        </br>
-        <label for="role">Role</label>
-        <input name="role" type="text" required 
-            placeholder="Back-end Engineer"/>
-        </br>
-        <label for="email">Email</label>
-        <input name="email" type="email" required 
-            placeholder="name@company.com"/>
-        </br>
-        <label for="phone">Phone</label>
-        <input name="phone" type="text" required 
-            placeholder="+1 (123) 456-7890"/>
-        </br>
-        <label for="department">Department</label>
-        <input name="department" type="text" required 
-            placeholder="Engineering"/>
-        </br>
-        <label for="joinDate">Join Date</label>
-        <input name="joinDate" type="date" required
-            placeholder="MM/DD/YYYY" />
-        <label for="location">Location</label>
-        <input name="location" type="text" required 
-            placeholder="New York, NY"/>
-        </br>
-        <input type="submit" value="Add Employee" />
+        <div class="formGrid2ColContainer"> 
+
+            <div class="formGridRow2Col">
+                <label for="fname">First Name</label>
+                <input name="fname" type="text" required />
+            </div>
+            <div class="formGridRow2Col">
+                <label for="lname">Last Name</label>
+                <input name="lname" type="text" required />
+            </div>
+
+            <div class="formGridRow2Col">
+                <label for="department">Department</label>
+                <select name="department">
+                    <option value="" disabled selected>Select a department...</option>
+                    <% Object.entries(DEPARTMENTS).forEach(([key, label]) => { %>
+                        <option value="<%= key %>">
+                            <%= label %>
+                        </option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="formGridRow2Col">
+                <label for="role">Role</label>
+                <input name="role" type="text" required />
+            </div>
+            
+            <div class="formGridRow2Col">
+                <label for="email">Email</label>
+                <input name="email" type="email" required 
+                    placeholder="name@company.com" />
+            </div>
+            <div class="formGridRow2Col">
+                <label for="phone">Phone</label>
+                <input name="phone" type="text" required 
+                    placeholder="+1 (123) 456-7890" />
+            </div>
+        
+            <div class="formGridRow2Col">
+                <label for="joinDate">Join Date</label>
+                <input name="joinDate" type="date" required
+                    placeholder="MM/DD/YYYY" />
+            </div>
+
+            <div class="formGridRow2Col">
+                <label for="location">Location</label>
+                <input name="location" type="text" required 
+                    placeholder="New York, NY" />
+            </div>
+
+            <div class="mt-6 flex gap-3">
+                <input type="submit" class="btn-submit" value="Save" />
+                <input type="button" class="btn-secondary" value="Cancel" onclick="window.location.href='/dashboard'"/>
+            </div>
+        </div>
     </form>
-</body>
-</html>
+</div>

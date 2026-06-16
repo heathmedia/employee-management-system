@@ -10,5 +10,11 @@
     "email": "adriana@co.com",
     "password": "$2b$10$9E5yA5t6l7//reBX9ZmnCe8WqoK/jD0kIw4QrBg5t/JZ2ipKYIDPO",
     "role": "user"
+  },
+  {
+    "id": "76831696-0d1b-44ee-a9a0-afa6c47c9d42",
+    "email": "bill@bob.com",
+    "password": "$2b$10$869.YBsCu7B8F968vwJGne4.cIWpHiyXk9.bcvukfHvogH4JcdS/G",
+    "role": "user"
   }
 ]

@@ -28,11 +28,7 @@
       <p class="header-secondary">Create an account</p>
       <h2 class="header-primary">Join with your work email</h2>
 
-      <% if (locals.error) { %>
-        <div class="msg-error">
-          <%= locals.error %>
-        </div>
-      <% } %>
+      <%- include('./partials/statusMessage') %>
 
       <form method="POST" action="/signup">
         <div class="mb-4">
