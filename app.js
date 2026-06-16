@@ -172,18 +172,27 @@ app.post('/addEmployee', requireAdmin, (req, res) => {
     console.log("POST to /addEmployee...")
     const { fname, lname, role, email, phone, department, joinDate, location } = req.body;
     const employees = readEmployees();
-    console.log("EMPLOYEES", employees);
+    const users = readUsers();
+    
     const newEmployee = {
         id: crypto.randomUUID(),
         fname,
         lname,
         department,
         role,
-        email,
+        email: email.toLowerCase(),
         phone,
         joinDate,
         location
     };
+
+    const existingUser = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+    const existingEmployee = employees.find(e => e.email.toLowerCase() === email.toLowerCase());
+
+    if (existingUser || existingEmployee) {
+        req.session.flash = { type: "error", message: `A account with the email ${email} already exists.`};
+        return res.redirect('/addEmployee');
+    }
 
     console.log("NEW EMPLOYEE", newEmployee);
 
