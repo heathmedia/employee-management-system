@@ -164,6 +164,12 @@ app.get('/', (req, res) => {
     res.redirect('/login')
 });
 
+app.get('/api/employees', requireAdmin, (req, res) => {
+    
+    const employees = readEmployees();
+    res.json(employees);
+});
+
 app.get('/addEmployee', requireAdmin, (req, res) => {
     res.render('addEmployee')
 });
@@ -190,7 +196,7 @@ app.post('/addEmployee', requireAdmin, (req, res) => {
     const existingEmployee = employees.find(e => e.email.toLowerCase() === email.toLowerCase());
 
     if (existingUser || existingEmployee) {
-        req.session.flash = { type: "error", message: `A account with the email ${email} already exists.`};
+        req.session.flash = { type: "error", message: `An account with the email ${email} already exists.`};
         return res.redirect('/addEmployee');
     }
 

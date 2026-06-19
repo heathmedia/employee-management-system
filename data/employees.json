@@ -1,11 +1,11 @@
 [
   {
     "id": "b50733a4-c59a-4b0e-9a06-bff6d17cface",
-    "fname": "Adriana",
-    "lname": "Rojas",
+    "fname": "Glenallen",
+    "lname": "Mixon",
     "department": "creative",
     "role": "Chief Creative Officer",
-    "email": "adriana@co.com",
+    "email": "lmixon@co.com",
     "phone": "+1 (702) 555-5555",
     "joinDate": "2000-10-24",
     "location": "San Francisco, CA"
@@ -13,43 +13,32 @@
   {
     "id": "46b2744d-653c-41ee-87c2-495b4c5e642d",
     "fname": "Scott",
-    "lname": "Heath",
+    "lname": "Dourque",
     "department": "engineering",
     "role": "Full Stack Engineer",
-    "email": "scott@scott.com",
+    "email": "sdorque@co.com",
     "phone": "+1 (111) 222-3333",
     "joinDate": "2026-06-09",
     "location": "London, UK"
   },
   {
-    "id": "76831696-0d1b-44ee-a9a0-afa6c47c9d42",
-    "fname": "Billy",
-    "lname": "Bob",
-    "department": "hr",
-    "role": "Agent",
-    "email": "bill@bob.com",
-    "phone": "+1 (444) 665-7777",
-    "joinDate": "2026-03-03",
-    "location": "New York, NY"
-  },
-  {
     "id": "412ebc7f-45f7-4511-998d-35c767cd528e",
-    "fname": "Jane",
-    "lname": "Doe",
+    "fname": "Mike",
+    "lname": "Truk",
     "department": "marketing",
     "role": "Senior Marketing Lead",
-    "email": "jane@co.com",
+    "email": "mtruk@co.com",
     "phone": "1 234 567 8901",
     "joinDate": "2026-06-15",
     "location": "Salt Lake City, UT"
   },
   {
     "id": "b3e91cb8-a077-408d-87f3-281a3e8ac234",
-    "fname": "Cory",
-    "lname": "Livengood",
+    "fname": "Karla",
+    "lname": "Dandleton",
     "department": "finance",
     "role": "Junior Accountant",
-    "email": "cory@cory.com",
+    "email": "kdandleton@co.com",
     "phone": "5 543 345 3456",
     "joinDate": "2026-06-14",
     "location": "Cary, NC"
@@ -57,12 +46,12 @@
   {
     "id": "00cba76e-6502-4554-9bac-2c31d8c886f4",
     "fname": "Millie",
-    "lname": "Rojas",
+    "lname": "Girlie",
     "department": "creative",
     "role": "Chief Dog Officer",
     "email": "millie@co.com",
     "phone": "+1 (222) 111-1212",
     "joinDate": "2026-06-14",
-    "location": "Raleigh, NC"
+    "location": "Las Vegas, NV"
   }
 ]

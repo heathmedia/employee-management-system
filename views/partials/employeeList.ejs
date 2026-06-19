@@ -26,10 +26,10 @@
         <% if (locals.user.role === 'admin') { %>
             <td class="whitespace-nowrap">
                 <div class="flex gap-2">
-                <button title="Edit" aria-label="Edit employee" class="btn-regular min-w-8" onclick="location.href = '/editEmployee/<%= employee.id %>'">
+                <button class="edit-btn" title="Edit" aria-label="Edit employee" class="btn-regular min-w-8" onclick="location.href = '/editEmployee/<%= employee.id %>'">
                     <i class="fa-solid fa-pencil"></i>
                 </button>
-                <button title="Delete" aria-label="Delete employee" class="btn-regular min-w-8" onclick="confirmEmployeeDelete(
+                <button class="delete-btn" title="Delete" aria-label="Delete employee" class="btn-regular min-w-8" onclick="confirmEmployeeDelete(
                 '<%= employee.id %>','<%= employee.fname %>','<%= employee.lname %>')">
                     <i class="fa-solid fa-trash"></i>
                 </button>

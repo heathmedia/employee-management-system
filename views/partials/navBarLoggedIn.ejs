@@ -1,8 +1,0 @@
-<nav>
-    <% if(locals.user.role === "admin") { %>
-        <a href="/dashboard">Dashboard</a>
-    <% } else if(locals.user.role === "user") { %>
-        <a href="/directory">Directory</a>
-    <% } %>
-    <a href="/logout">Logout</a>
-</nav>

@@ -17,7 +17,8 @@ module.exports = defineConfig({
         departmentDisplay: 'Engineering',
         role: 'Senior QA Engineer',
         joinDate: '2024-10-06',
-        location: 'Detroit, MI'
+        location: 'Detroit, MI',
+        password: 'password123'
       }
     },
     setupNodeEvents(on, config) {
